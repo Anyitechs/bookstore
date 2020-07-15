@@ -18,5 +18,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('books', 'BookController');
-Route::post('books/{id}/reviews', 'ReviewController@store');
+
+Route::group(['middleware' => ['auth:admin']], function () {
+    Route::apiResource('books', 'BookController');
+    Route::post('books/{id}/reviews', 'ReviewController@store');
+});
+
+Route::group(['middleware' => ['auth:user']], function () {
+    Route::post('books/{id}/reviews', 'ReviewController@store');
+});
+
+
+

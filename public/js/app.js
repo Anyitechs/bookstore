@@ -1968,40 +1968,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'AllCollections',
   data: function data() {
     return {
-      tasks: []
+      books: []
     };
   },
   created: function created() {
     var _this = this;
 
-    this.axios.get('http://localhost:8000/api/tasks').then(function (response) {
-      _this.tasks = response.data;
+    this.axios.get('http://127.0.0.1:8000/api/books').then(function (response) {
+      _this.books = response.data.data;
     });
-  },
-  methods: {
-    deleteTask: function deleteTask(id) {
-      var _this2 = this;
-
-      this.axios["delete"]("http://localhost:8000/api/delete/".concat(id)).then(function (response) {
-        var i = _this2.tasks.map(function (item) {
-          return item.id;
-        }).indexOf(id); // find index of your object
-
-
-        _this2.tasks.splice(i, 1);
-      });
-    }
   }
 });
 
@@ -19749,48 +19728,17 @@ var render = function() {
       _vm._v(" "),
       _c(
         "tbody",
-        _vm._l(_vm.tasks, function(task) {
-          return _c("tr", { key: task.id }, [
-            _c("td", [_vm._v(_vm._s(task.id))]),
+        _vm._l(_vm.books, function(book) {
+          return _c("tr", { key: book.id }, [
+            _c("td", [_vm._v(_vm._s(book.id))]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(task.title))]),
+            _c("td", [_vm._v(_vm._s(book.title))]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(task.description))]),
+            _c("td", [_vm._v(_vm._s(book.description))]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(task.created_at))]),
+            _c("td", [_vm._v(_vm._s(book.created_at))]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(task.updated_at))]),
-            _vm._v(" "),
-            _c("td", [
-              _c(
-                "div",
-                { staticClass: "btn-group", attrs: { role: "group" } },
-                [
-                  _c(
-                    "router-link",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: { to: { name: "edit", params: { id: task.id } } }
-                    },
-                    [_vm._v("Edit\n                    ")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-danger",
-                      on: {
-                        click: function($event) {
-                          return _vm.deleteTask(task.id)
-                        }
-                      }
-                    },
-                    [_vm._v("Delete")]
-                  )
-                ],
-                1
-              )
-            ])
+            _c("td", [_vm._v(_vm._s(book.updated_at))])
           ])
         }),
         0

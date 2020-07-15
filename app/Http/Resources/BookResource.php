@@ -20,9 +20,9 @@ class BookResource extends JsonResource
             'isbn' => $this->isbn,
             'title' => $this->title,
             'description' => $this->description,
-            'user' => $this->user,
-            'review' => $this->review,
-            'average_review' => $this->review->avg('review'),
+            'author' => $this->author,
+            'reviews' => $this->reviews,
+            'average_review' => $this->reviews->avg('review'),
         ];
     }
 }

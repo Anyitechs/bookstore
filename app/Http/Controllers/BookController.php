@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Book;
+use App\Review;
 use App\Http\Resources\BookResource;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,32 @@ class BookController extends Controller
      */
     public function index()
     {
-        return BookResource::collection(Book::with('review')->paginate(25));
+        $books = Book::with('reviews');
+
+        if(request('title')){
+            $books->where('title', 'LIKE', '%'.request('title').'%');
+        }
+
+        if(request('author_id')){
+            $books->where('author_id', request('author_id'));
+        }
+
+        if(request('sort_by') === 'title'){
+            $books->orderBy('title', 'asc');
+        }
+
+        if(request('sort_by') === 'avg_review'){
+            $books->addSelect(['average_reviews' => Review::select('count(*) as avg_reveiw')
+                ->whereColumn('book_id', 'books.id')
+                ->orderBy('avg_reveiw', 'asc')
+                ->limit(1)
+            ]);
+        }
+        return($books->get());
+
+    
+        
+        return BookResource::collection($books->paginate());
     }
 
     /**
@@ -26,8 +52,16 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([ 
+            'isbn' => 'required|digits:13|unique:books,isbn',
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'author_id' => 'required|integer|exists:authors,id'
+        ]);
+      
+
         $book = Book::create([
-            'user_id' => $request->user()->id,
+            'author_id' => $request->author_id,
             'isbn' => $request->isbn,
             'title' => $request->title,
             'description' => $request->description,
@@ -45,6 +79,7 @@ class BookController extends Controller
     public function show($id)
     {
         return new BookResource($book);
+
     }
 
     /**

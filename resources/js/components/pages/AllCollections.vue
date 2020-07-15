@@ -14,19 +14,12 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="task in tasks" :key="task.id">
-                <td>{{ task.id }}</td>
-                <td>{{ task.title }}</td>
-                <td>{{ task.description }}</td>
-                <td>{{ task.created_at }}</td>
-                <td>{{ task.updated_at }}</td>
-                <td>
-                    <div class="btn-group" role="group">
-                        <router-link :to="{name: 'edit', params: { id: task.id }}" class="btn btn-primary">Edit
-                        </router-link>
-                        <button class="btn btn-danger" @click="deleteTask(task.id)">Delete</button>
-                    </div>
-                </td>
+            <tr v-for="book in books" :key="book.id">
+                <td>{{ book.id }}</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.description }}</td>
+                <td>{{ book.created_at }}</td>
+                <td>{{ book.updated_at }}</td>
             </tr>
             </tbody>
         </table>
@@ -38,25 +31,15 @@
         name: 'AllCollections',
         data() {
             return {
-                tasks: []
+                books: []
             }
         },
         created() {
             this.axios
-                .get('http://localhost:8000/api/tasks')
+                .get('http://127.0.0.1:8000/api/books')
                 .then(response => {
-                    this.tasks = response.data;
+                    this.books = response.data.data;
                 });
-        },
-        methods: {
-            deleteTask(id) {
-                this.axios
-                    .delete(`http://localhost:8000/api/delete/${id}`)
-                    .then(response => {
-                        let i = this.tasks.map(item => item.id).indexOf(id); // find index of your object
-                        this.tasks.splice(i, 1)
-                    });
-            }
         }
     }
 </script>
